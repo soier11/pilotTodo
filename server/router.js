@@ -1,8 +1,8 @@
 import express from 'express';
-import * as apis from './routers';
+import {testRouter} from './routers';
 
-const router = express.Router();
+const router = express();
 
-router.use('/test', apis.testRouter);
+router.use('/test', testRouter);
 
 export default router;

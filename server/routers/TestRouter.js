@@ -3,6 +3,6 @@ import {testService1} from '../services/TestService';
 
 const router = express();
 
-router.get('/', (req, res) => testService1(req, res));
+router.get('/a', (req, res) => testService1(req, res));
 
 export default router;
