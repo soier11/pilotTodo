@@ -7,40 +7,41 @@ import {makeExecutableSchema} from 'graphql-tools'
 import graphql from 'graphql';
 import path from 'path';
 import fs from 'fs';
+import connectMongoose from './mgStore';
 
-console.log('#[Uploaind the env file.]');
-
-const PORT = 3500;
+const PORT = 3010;
 const app = express();
 
 app.use(bodyParser.json());
 app.use(morgan('combined'));
-console.log('#[Setting the body parser is done.]');
-
 app.use('/api', router);
 
-app.get('/get', (req, res) => res.send({
-  result: 'd'
-}))
 console.log('#[Uploading the router for the API.]');
 
-// app.use('/', express.static(__dirname + '/../../client/build'));
-console.log('#[Setting the static files is done.]');
+
+// console.log('#[Setting the static files is done.]');
+
+console.log('Connecting the MongDB...')
+connectMongoose();
+console.log('Being connected successfully.')
+
+app.all('/*', function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+  res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+});
 
 // page router
 let indexPage = "";
-let nextPage = "";
-  
-// fs.readFile(path.resolve(__dirname, '../../client/build/index.html'), 'utf8', function(err, data){
-//     indexPage = data;
-// });
 
-// fs.readFile(path.resolve(__dirname, '../../next/build/index.html'), 'utf8', function(err, data){
-//   nextPage = data;
-// });
+fs.readFile(path.resolve(__dirname, '../client-yc/dist/index.html'), 'utf8', function(err, data){
+  indexPage = data;
 
-// app.get('/', (req, res) => res.end(indexPage))
-// app.get('/nextPage', (req, res) => res.end(nextPage))
+});
+app.use('/', express.static(__dirname + '/../client-yc/dist'));
+app.get('/', (req, res) => res.end(indexPage))
 
 const typeDefs = `
   type geo{

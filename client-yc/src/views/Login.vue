@@ -3,7 +3,7 @@
         <p v-for="ask in fetchedAsks">
             <a :href="ask.url">{{ask.title}}</a>
             <small> {{ask.time_ago}} by
-                <router-link :to="'/user/' + ask.user">{{ask.user}}</router-link>
+                <router-link :to="'/user/' + ask.User">{{ask.User}}</router-link>
             </small>
         </p>
     </div>
